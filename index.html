@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#151918"><title>STRATA — Северный рубеж</title><link rel="icon" href="brand.svg"><link rel="stylesheet" href="style.css"></head>
+<body>
+<svg class="defs" xmlns="http://www.w3.org/2000/svg"><defs>
+<symbol id="i-volume" viewBox="0 0 24 24"><path d="M4 9h4l5-4v14l-5-4H4zM16 8q4 4 0 8m3-11q7 7 0 14"/></symbol>
+<symbol id="i-muted" viewBox="0 0 24 24"><path d="M4 9h4l5-4v14l-5-4H4zM17 9l5 6m0-6-5 6"/></symbol>
+<symbol id="i-pause" viewBox="0 0 24 24"><path d="M8 5v14m8-14v14" stroke-width="3.7"/></symbol>
+<symbol id="i-map" viewBox="0 0 24 24"><path d="m3 6 6-3 6 3 6-3v15l-6 3-6-3-6 3zM9 3v15m6-12v15"/></symbol>
+<symbol id="i-journal" viewBox="0 0 24 24"><path d="M6 4h13v16H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2zm1 0v16m3-11h6m-6 4h4"/></symbol>
+<symbol id="i-pack" viewBox="0 0 24 24"><path d="M9 6V4h6v2M7 7h10l3 5v8H4v-8zm0 7h10v4H7z"/></symbol>
+<symbol id="i-key" viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M5 9h1m2 0h1m2 0h1m2 0h1m2 0h1M5 12h1m2 0h1m2 0h1m2 0h1m2 0h1m-9 4h7"/></symbol>
+<symbol id="i-tree" viewBox="0 0 24 24"><path d="m12 2-5 7h3l-5 6h3l-3 4h14l-3-4h3l-5-6h3zM12 19v3"/></symbol>
+<symbol id="i-close" viewBox="0 0 24 24"><path d="m6 6 12 12m0-12L6 18"/></symbol>
+<symbol id="i-check" viewBox="0 0 24 24"><path d="m4 12 5 5L20 6"/></symbol>
+<symbol id="i-play" viewBox="0 0 24 24"><path d="m7 4 13 8-13 8z"/></symbol>
+</defs></svg>
+<header><div class="brand"><img src="brand.svg" alt="" width="33" height="33"><canvas id="wordmark" width="128" height="28" aria-label="STRATA"></canvas></div><span class="divider"></span><span class="worldtitle">Северный рубеж</span><span class="headerSpacer"></span><span class="saveStatus" id="saveStatus"><i></i>Мир сохранён</span><span class="divider small"></span><button id="sound" class="iconBtn" title="Включить звук" aria-label="Включить звук"><svg><use href="#i-muted"/></svg></button><button id="pause" class="iconBtn" title="Пауза (Esc)" aria-label="Пауза"><svg><use href="#i-pause"/></svg></button></header>
+<main id="stage">
+<canvas id="game" tabindex="0" aria-label="Игровой мир. A и D — движение, пробел — прыжок, левая кнопка мыши — добыча."></canvas>
+<section id="vitals" class="hud panel" aria-label="Показатели персонажа">
+<div class="stat" id="health" title="Здоровье"><canvas data-art="heart"></canvas><span class="track"><span></span></span><b></b></div>
+<div class="stat" id="food" title="Сытость"><canvas data-art="hunger"></canvas><span class="track"><span></span></span><b></b></div>
+<div class="stat" id="stamina" title="Выносливость"><canvas data-art="energy"></canvas><span class="track"><span></span></span><b></b></div>
+</section>
+<section id="clock" class="hud panel"><div><canvas data-art="sun"></canvas><strong id="day">ДЕНЬ 01</strong><span class="vline"></span><span id="time">17:20</span></div><div class="biome"><svg><use href="#i-tree"/></svg><span id="biome">Хвойная долина</span></div></section>
+<button id="quest" class="hud panel" title="Открыть журнал заданий"><span class="questhead"><svg><use href="#i-journal"/></svg>ЗАДАНИЕ</span><span id="questTitle">Первые запасы</span><span class="questline"><i></i><span id="questText">Добудьте древесину</span><b id="questCount">0/4</b></span></button>
+<div id="toast" role="status"></div><div id="targetLabel"></div>
+<div id="beltWrap"><div id="equipped" aria-live="polite">Каменная кирка</div><div id="belt" role="group" aria-label="Быстрый доступ"></div></div>
+<div id="touch"><div><button data-hold="left" aria-label="Влево">◀</button><button data-hold="right" aria-label="Вправо">▶</button></div><div><button data-hold="up" aria-label="Подняться или прыгнуть">▲</button><button data-hold="down" aria-label="Спуститься">▼</button><button id="touchUse" aria-label="Использовать">F</button><button id="buildMode" aria-label="Переключить строительство"><svg><use href="#i-pack"/></svg></button></div></div>
+<div id="overlay" hidden><section class="dialog" id="dialog" role="dialog" aria-modal="true" aria-labelledby="dialogTitle"></section></div>
+</main>
+<footer><button id="help" class="footbtn"><svg><use href="#i-key"/></svg>Управление <kbd>H</kbd></button><div class="hints"><span><kbd>A</kbd><kbd>D</kbd> Ходьба</span><span><kbd>Пробел</kbd> Прыжок</span><span><kbd>ЛКМ</kbd> Добыча</span><span><kbd>ПКМ</kbd> Постройка</span></div><div class="footRight"><button id="mapBtn" class="footbtn"><svg><use href="#i-map"/></svg>Карта <kbd>M</kbd></button><button id="bagBtn" class="footbtn"><svg><use href="#i-pack"/></svg>Рюкзак <kbd>E</kbd></button></div></footer>
+<script src="session-store.js"></script><script src="sprites.js"></script><script src="sky.js"></script><script src="world.js"></script><script src="expansion.js"></script><script src="frontier-content.js"></script><script src="render.js"></script><script src="game.js"></script><script src="expansion-runtime.js"></script><script src="expansion-art.js"></script><script src="frontier.js"></script><script src="launcher.js"></script><script src="coop-core.js"></script><script src="coop.js"></script></body></html>

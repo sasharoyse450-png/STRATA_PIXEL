@@ -1,0 +1,26 @@
+'use strict';
+// The existing texture atlas and legacy save key remain unchanged.
+const frontierItems={
+ platform:['Деревянная платформа','Прыгайте снизу; S — спуститься.','build','#bc9867'],wall:['Деревянная стена','Фоновая стена для жилых комнат. ПКМ — установить.','build','#b88b60'],stonewall:['Каменная стена','Фоновая стена для подземного дома.','build','#8c9590'],chair:['Стул','Нужен для заселения NPC.','build','#bd9565'],table:['Стол','Нужен для заселения NPC.','build','#caa370'],hammer:['Молот','ЛКМ снимает мебель, платформы и стены. Сундук должен быть пуст.','tool','#b2b9ac'],
+ bow:['Охотничий лук','24 урона. Стреляет стрелами в сторону курсора.','tool','#b79862'],arrow:['Стрелы','Боеприпасы для лука.','material','#c1c9c0'],staff:['Кристальный посох','30 урона. Расходует 8 маны.','tool','#8bd9d0'],firestaff:['Посох глубин','48 урона. Расходует 12 маны.','tool','#f4aa6a'],bomb:['Бомба','Бросок ЛКМ. Взрывается через 1,5 секунды и разрушает породу.','tool','#bd8b5d'],rope:['Верёвка','Установите как лестницу. W / S — подъём и спуск.','build','#c1ac7f'],
+ ironarmor:['Железная броня','Защита 8. Наденьте в слот брони.','tool','#bcc8ca'],helmet:['Железный шлем','Защита 4. Наденьте в слот шлема.','tool','#c6d1d0'],boots:['Сапоги разведчика','Бег быстрее на 30%. Наденьте в слот обуви.','tool','#b89468'],doublejump:['Крылатый талисман','Даёт второй прыжок. Наденьте в слот аксессуара.','tool','#b6c9e1'],regenring:['Кольцо восстановления','Постепенно лечит вне боя. Слот аксессуара.','tool','#dbbc77'],
+ heartcrystal:['Кристалл жизни','Использовать: +20 к максимальному здоровью, до 200.','food','#f0808c'],manastar:['Звезда маны','Использовать: +20 к максимальной мане, до 160.','food','#8dbfe8'],manapotion:['Зелье маны','Восстанавливает 60 маны.','food','#97a6e2'],recall:['Камень возвращения','F или ЛКМ — вернуться к своей кровати или в лагерь. Не расходуется.','tool','#87d6ba'],
+ coin:['Медные монеты','Торговля с поселившимся торговцем.','material','#dfa15f'],lens:['Лунная линза','Добыча с ночных духов. Для призыва босса.','material','#d5a4d5'],seal:['Печать разлома','Ночью призывает Стража разлома. Используйте из руки.','tool','#bd89b9'],ember:['Осколок разлома','Награда за Стража. Открывает снаряжение глубин.','material','#e8a277'],deepseal:['Печать глубин','Призывает Сердце глубин ниже 25 блоков. Требуется победа над Стражем.','tool','#a78bce'],deepbar:['Слиток глубин','Награда за Сердце глубин.','material','#ae9fda'],deepblade:['Клинок глубин','70 урона. Финальное оружие экспедиции.','tool','#b1a5ec']};
+for(const [id,v] of Object.entries(frontierItems)){extraItems[id]=v;items[id]=v;label[id]=v[0];}
+for(const [id,c,at,q]of[
+ ['platform',{plank:1},null,4],['wall',{plank:1},null,4],['stonewall',{stone:1},null,4],['chair',{plank:3},'bench'],['table',{plank:4},'bench'],['hammer',{stone:3,wood:2}],['bow',{wood:4,fiber:3},'bench'],['arrow',{wood:1,stone:1},null,20],['staff',{crystal:4,ingot:2},'bench'],['firestaff',{ember:4,ingot:4},'anvil'],['bomb',{coal:2,ingot:1},'anvil',3],['rope',{fiber:1},null,5],['ironarmor',{ingot:8,hide:3},'anvil'],['helmet',{ingot:4},'anvil'],['boots',{hide:4,fiber:3},'bench'],['doublejump',{wing:4,crystal:3},'alchemy'],['regenring',{silverbar:3,blossom:3},'alchemy'],['manastar',{crystal:3},'alchemy'],['manapotion',{blossom:1,mushroom:1},'alchemy'],['recall',{crystal:2,stone:3},'bench'],['seal',{lens:3,crystal:3},'alchemy'],['deepseal',{ember:3,obsidian:5,ruby:2},'anvil'],['deepblade',{deepbar:5,ember:2},'anvil']])extraRecipe(id,c,at,q||1);
+const expandedWorld=generateWorld;
+generateWorld=function(){const w=expandedWorld();
+ // Extra galleries retain all original terrain and constructions above row 68.
+ for(let x=1;x<COLS-1;x++)for(let y=68;y<ROWS-2;y++){
+ const vein=Math.sin(x*.11)*6+Math.sin(x*.037)*9;
+ if(Math.abs(y-(76+vein))<3||Math.abs(y-(98+Math.sin(x*.16)*5))<3||x%47>21&&x%47<25&&y<102){w.tiles[y][x]=null;continue;}
+ const n=noise(x,y,831);w.tiles[y][x]=n>.96?'ruby':n>.91?'sapphire':n>.82?'obsidian':n<.07?'gold':n<.13?'silver':'stone';
+ }
+ for(let x=14;x<COLS-10;x+=29){let y=surface(x)+15;while(y<ROWS-4&&(w.tiles[y][x]||!w.tiles[y+1][x]))y++;if(y<ROWS-4)w.objects.push({id:'heartcrystal',x,y});}
+ for(const m of w.mobs){const x=m.x/T;if(x<65&&m.type==='rabbit'){m.type='wolf';m.hp=m.maxhp=50;}if(x>225&&x<300&&m.type==='rabbit'){m.type='boar';m.hp=m.maxhp=45;}if(x>300&&m.type==='beetle'){m.type='crawler';m.hp=m.maxhp=55;}}
+ for(let x=230;x<300;x+=9)w.objects.push({id:'blossom',x,y:surface(x)-1});
+ // A traversable buried room gives an early exploration reward.
+ for(const cx of [42,162,272,352]){const cy=surface(cx)+19;for(let y=cy-4;y<=cy;y++)for(let x=cx-4;x<=cx+4;x++)w.tiles[y][x]=y===cy||x===cx-4||x===cx+4?'plank':null;w.tiles[cy-1][cx-4]=null;w.tiles[cy-2][cx-4]=null;w.objects.push({id:'chest',x:cx,y:cy-1},{id:'torch',x:cx+2,y:cy-3});}
+ return w;};
+quests.push(['Новый дом','Заселите торговца','Постройте закрытую комнату со стенами фона, столом, стулом, дверью и светом. Проверьте её во вкладке «Поселение».','merchant',1],['Ночной страж','Победите Стража разлома','Соберите три лунные линзы с ночных духов, создайте печать у алхимика и используйте ночью.','riftBoss',1],['Сердце земли','Победите Сердце глубин','После Стража создайте печать глубин и используйте её под землёй.','deepBoss',1]);
